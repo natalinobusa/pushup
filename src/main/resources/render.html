@@ -1,0 +1,90 @@
+<html>
+<head>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+
+<script type="text/javascript">
+$(function () {
+    $(document).ready(function() {
+        Highcharts.setOptions({
+            global: {
+                useUTC: false
+            }
+        });
+    
+        var chart;
+        var source;
+        
+        if (!!window.EventSource) {
+          source = new EventSource('http://localhost:8888/api/stream');
+        } else {
+          // Result to xhr polling :(
+          alert('no event source')
+        }
+        
+        
+        $('#container').highcharts({
+            chart: {
+                type: 'bar',
+                animation: Highcharts.svg, // don't animate in old IE
+                marginRight: 10,
+                events: {
+                    load: function() {
+    
+                        // set up the updating of the chart each second
+                        var series = this.series[0];
+                        
+                        source.addEventListener('message', function(e) {
+                          var data = JSON.parse(e.data);
+                          series.setData([data.tralala]);
+                          console.log(data);
+                        }, false);
+                    }
+                }
+            },
+            title: {
+                text: 'Natalino hours of sleep'
+            },
+            xAxis: {
+                categories: ["Natalino"],
+                tickPixelInterval: 150
+            },
+            yAxis: {
+                title: {
+                    text: 'Value'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function() {
+                        return '<b>' + this.series.name +'</b><br/>'+
+                        this.x +' :' + Highcharts.numberFormat(this.y, 2);
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            exporting: {
+                enabled: false
+            },
+            series: [{
+                name: 'Sleeping hours today',
+                data: [8]
+            }]
+        });
+    });
+    
+});
+</script>
+</head>
+
+<body>
+<div id="container" style="min-width: 310px; height: 400px; width:600px"></div>
+
+</body>
+</html>
