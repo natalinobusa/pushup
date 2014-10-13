@@ -37,7 +37,7 @@ $(function () {
                         
                         source.addEventListener('message', function(e) {
                           var data = JSON.parse(e.data);
-                          series.setData([data.tralala]);
+                          series.setData([data.data]);
                           console.log(data);
                         }, false);
                     }
