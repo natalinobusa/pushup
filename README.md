@@ -1,4 +1,4 @@
-pushup
+Push up
 ======
 
 Pushing message from REST to Stream
