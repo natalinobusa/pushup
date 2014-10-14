@@ -118,8 +118,8 @@ trait ApiPushupService extends HttpService {
 
             case ev: Http.ConnectionClosed =>
               log.warning("Stopping response streaming due to {}", ev)
-              context.stop(self)
-
+              // keep the actor on, in case of client reconnect
+              // or die after some (long) time
           }
         }
       }
